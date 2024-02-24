@@ -1,4 +1,4 @@
-package com.storyforge.plugins.data
+package com.storyforge.plugins.data.model
 
 data class User(
     val id: String,
