@@ -101,4 +101,27 @@ fun Route.article(
             call.respond(status = HttpStatusCode.BadRequest, "Error While Fetching Article ${e.message}")
         }
     }
+    delete("v1/article/{id}") {
+        val parameter = call.parameters["id"]
+        try {
+            val article = parameter?.toInt()?.let { id ->
+                db.deleteArticleById(id)
+            } ?: return@delete call.respondText(
+                text = "No Id Found...",
+                status = HttpStatusCode.BadRequest
+            )
+
+            if (article == 1) {
+                call.respondText(
+                    text = "Deleted Successfully",
+                    status = HttpStatusCode.OK
+                )
+            } else {
+                call.respondText(text = "Id Not Found", status = HttpStatusCode.BadRequest)
+            }
+
+        } catch (e: Throwable) {
+            call.respond(status = HttpStatusCode.BadRequest, "Error While Deleting Article ${e.message}")
+        }
+    }
 }
