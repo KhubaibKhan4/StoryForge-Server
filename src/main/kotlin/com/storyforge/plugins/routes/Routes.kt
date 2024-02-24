@@ -84,4 +84,21 @@ fun Route.article(
             call.respond(status = HttpStatusCode.BadRequest, "Getting Articles Error")
         }
     }
+    get("v1/article/{id}") {
+        val parameter = call.parameters["id"]
+        try {
+            val article = parameter?.toInt()?.let { id ->
+                db.getArticleById(id)
+            } ?: return@get call.respondText(
+                text = "Invalid ID",
+                status = HttpStatusCode.BadRequest
+            )
+            article.id.let {
+                call.respond(status = HttpStatusCode.OK, article)
+            }
+
+        } catch (e: Throwable) {
+            call.respond(status = HttpStatusCode.BadRequest, "Error While Fetching Article ${e.message}")
+        }
+    }
 }
