@@ -3,6 +3,8 @@ package com.storyforge.plugins.domain.repository
 import com.storyforge.plugins.data.local.ArticleTable
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -26,5 +28,12 @@ object DatabaseFactory {
 
         return HikariDataSource(config)
     }
+
+    suspend fun <T> dbQuery(block: () -> T): T =
+        withContext(Dispatchers.IO){
+            transaction {
+                block()
+            }
+        }
 
 }
