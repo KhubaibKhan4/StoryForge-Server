@@ -5,13 +5,13 @@ import com.storyforge.plugins.data.model.Comment
 
 interface ArticleDao {
     suspend fun insert(
-        id: String,
+        id: Int,
         title: String,
         author: String,
         content: String,
         publishDate: String,
-        tags: List<String>,
-        comments: List<Comment>,
+        tags: String,
+        comments: String,
         claps: Int,
         imageUrl: String?,
         isFeatured: Boolean
@@ -21,10 +21,11 @@ interface ArticleDao {
     suspend fun getArticleById(id: Int): Article?
     suspend fun deleteArticleById(id: Int): Int?
     suspend fun updateArticle(
+        id: Int,
         title: String,
         content: String,
-        tags: List<String>,
-        imageUrl: String?,
+        tags: String,
+        imageUrl: String,
         isFeatured: Boolean
     )
 }
