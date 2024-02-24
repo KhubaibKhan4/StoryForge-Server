@@ -9,7 +9,6 @@ import org.jetbrains.exposed.sql.statements.InsertStatement
 
 class ArticleRepository : ArticleDao {
     override suspend fun insert(
-        id: Int,
         title: String,
         author: String,
         content: String,

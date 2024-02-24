@@ -5,7 +5,6 @@ import com.storyforge.plugins.data.model.Comment
 
 interface ArticleDao {
     suspend fun insert(
-        id: Int,
         title: String,
         author: String,
         content: String,
