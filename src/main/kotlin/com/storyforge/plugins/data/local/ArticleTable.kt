@@ -1,6 +1,5 @@
 package com.storyforge.plugins.data.local
 
-import com.storyforge.plugins.data.model.Comment
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
 
