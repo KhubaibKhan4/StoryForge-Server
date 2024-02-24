@@ -124,4 +124,63 @@ fun Route.article(
             call.respond(status = HttpStatusCode.BadRequest, "Error While Deleting Article ${e.message}")
         }
     }
+    put("v1/article/{id}") {
+        val id = call.parameters["id"] ?: return@put call.respondText(
+            text = "Id Not Found!!",
+            status = HttpStatusCode.BadRequest
+        )
+
+        val updateInfo = call.receive<Parameters>()
+        val title = updateInfo["title"] ?: return@put call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.Unauthorized
+        )
+
+        val content = updateInfo["content"] ?: return@put call.respondText(
+            text = "MISSION FIELD",
+            status = HttpStatusCode.Unauthorized
+        )
+        val author = updateInfo["author"] ?: return@put call.respondText(
+            text = "MISSION FIELD",
+            status = HttpStatusCode.Unauthorized
+        )
+        val publishDate = updateInfo["publishDate"] ?: return@put call.respondText(
+            text = "MISSION FIELD",
+            status = HttpStatusCode.Unauthorized
+        )
+        val tags = updateInfo["tags"] ?: return@put call.respondText(
+            text = "MISSION FIELD",
+            status = HttpStatusCode.Unauthorized
+        )
+        val comments = updateInfo["comments"] ?: return@put call.respondText(
+            text = "MISSION FIELD",
+            status = HttpStatusCode.Unauthorized
+        )
+        val claps = updateInfo["claps"] ?: return@put call.respondText(
+            text = "MISSION FIELD",
+            status = HttpStatusCode.Unauthorized
+        )
+        val imageUrl = updateInfo["imageUrl"] ?: return@put call.respondText(
+            text = "MISSION FIELD",
+            status = HttpStatusCode.Unauthorized
+        )
+        val isFeatured = updateInfo["isFeatured"] ?: return@put call.respondText(
+            text = "MISSION FIELD",
+            status = HttpStatusCode.Unauthorized
+        )
+        try {
+            val result = id.toInt()
+            result.let {
+                db.updateArticle(id.toInt(), title, content, tags, imageUrl, isFeatured.toBoolean())
+            }
+            if (result == 1) {
+                call.respondText("Update SuccessFully....", status = HttpStatusCode.OK)
+            } else {
+                call.respondText("Something Went Wrong", status = HttpStatusCode.BadRequest)
+            }
+
+        } catch (e: Throwable) {
+            call.respond(status = HttpStatusCode.BadRequest, "Error While Updating Article ${e.message}")
+        }
+    }
 }
