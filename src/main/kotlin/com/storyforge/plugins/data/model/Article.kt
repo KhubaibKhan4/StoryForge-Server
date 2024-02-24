@@ -1,7 +1,6 @@
-package com.storyforge.plugins.data
+package com.storyforge.plugins.data.model
 
 import kotlinx.serialization.Serializable
-import java.sql.Date
 
 @Serializable
 data class Article(

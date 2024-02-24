@@ -1,4 +1,4 @@
-package com.storyforge.plugins.data
+package com.storyforge.plugins.data.model
 
 import kotlinx.serialization.Serializable
 
