@@ -72,4 +72,16 @@ fun Route.article(
         }
 
     }
+    get("v1/article") {
+        try {
+            val articleList = db.getAllArticle()
+            if (articleList?.isNotEmpty() == true) {
+                call.respond(articleList)
+            } else {
+                call.respondText("No Article Found....", status = HttpStatusCode.OK)
+            }
+        } catch (e: Throwable) {
+            call.respond(status = HttpStatusCode.BadRequest, "Getting Articles Error")
+        }
+    }
 }
