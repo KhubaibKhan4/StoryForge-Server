@@ -1,6 +1,7 @@
 package com.storyforge.plugins.routes
 
 import com.storyforge.plugins.domain.repository.ArticleRepository
+import com.storyforge.plugins.domain.repository.UserRepository
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -8,7 +9,8 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 fun Route.article(
-    db: ArticleRepository
+    db: ArticleRepository,
+    userDb: UserRepository
 ) {
     post("v1/article") {
         val parameters = call.receive<Parameters>()
@@ -183,4 +185,66 @@ fun Route.article(
             call.respond(status = HttpStatusCode.BadRequest, "Error While Updating Article ${e.message}")
         }
     }
+
+    post("v1/user/create") {
+        val parameter = call.receive<Parameters>()
+        val username = parameter["username"] ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val email = parameter["email"] ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val password = parameter["password"] ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val bio = parameter["bio"] ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val profileImageUrl = parameter["profileImageUrl"] ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val followerCount = parameter["followerCount"] ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val followingCount = parameter["followingCount"] ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val articleCount = parameter["articleCount"] ?: return@post call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+
+        try {
+            val user = userDb.insert(
+                username = username,
+                email = email,
+                password = password,
+                bio = bio,
+                profileImageUrl = profileImageUrl,
+                followerCount = followerCount.toInt(),
+                followingCount = followingCount.toInt(),
+                articleCount = articleCount.toInt(),
+            )
+            user?.id?.let {
+                call.respondText(
+                    text = "$email User Created Successfully...",
+                    status = HttpStatusCode.OK
+                )
+            }
+
+        } catch (e: Throwable) {
+            call.respondText(
+                text = "Error While Creating New User ${e.message}",
+                status = HttpStatusCode.Unauthorized
+            )
+        }
+    }
+
 }
