@@ -26,5 +26,5 @@ interface ArticleDao {
         tags: String,
         imageUrl: String,
         isFeatured: Boolean
-    )
+    ): Int?
 }
