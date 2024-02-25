@@ -174,7 +174,10 @@ fun Route.article(
             val result = id.toInt()
             result.let {
                 db.updateArticle(id.toInt(), title, content, tags, imageUrl, isFeatured.toBoolean())
-            }
+            } ?: call.respondText(
+                text = "MISSION FIELD",
+                status = HttpStatusCode.BadRequest
+            )
             if (result == 1) {
                 call.respondText("Update SuccessFully....", status = HttpStatusCode.OK)
             } else {
@@ -302,6 +305,59 @@ fun Route.article(
                     text = "No User Found....",
                     status = HttpStatusCode.BadRequest
                 )
+            }
+
+        } catch (e: Throwable) {
+            call.respondText(
+                text = "Error While Deleting User ${e.message}",
+                status = HttpStatusCode.Unauthorized
+            )
+        }
+    }
+    put("v1/user/{id}") {
+        val id = call.parameters["id"]
+
+        val updateInfo = call.receive<Parameters>()
+        val username = updateInfo["username"] ?: call.respondText(
+            text = "MISSION FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val email = updateInfo["email"] ?: call.respondText(
+            text = "MISSION FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val password = updateInfo["password"] ?: call.respondText(
+            text = "MISSION FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val bio = updateInfo["bio"] ?: call.respondText(
+            text = "MISSION FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        val profileImageUrl = updateInfo["profileImageUrl"] ?: call.respondText(
+            text = "MISSING FIELD",
+            status = HttpStatusCode.BadRequest
+        )
+        try {
+            val userId = id?.toInt()
+            userId?.let {
+                userDb.updateUser(
+                    userId,
+                    username = username.toString(),
+                    email = email.toString(),
+                    password.toString(),
+                    bio.toString(),
+                    profileImageUrl.toString()
+                )
+            } ?: call.respondText(
+                text = "MISSING FIELD",
+                status = HttpStatusCode.BadRequest
+            )
+
+            if (userId == 1) {
+                call.respondText(text = "User Deleted Successfully.....", status = HttpStatusCode.OK)
+            } else {
+                call.respondText(text = "Something Went wrong", status = HttpStatusCode.BadRequest)
             }
 
         } catch (e: Throwable) {
