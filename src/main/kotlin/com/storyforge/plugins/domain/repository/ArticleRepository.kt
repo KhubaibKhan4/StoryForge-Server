@@ -68,7 +68,7 @@ class ArticleRepository : ArticleDao {
         imageUrl: String,
         isFeatured: Boolean
     ): Int? {
-       return DatabaseFactory.dbQuery {
+        return DatabaseFactory.dbQuery {
             ArticleTable.update({ ArticleTable.id.eq(id) }) { article ->
                 article[ArticleTable.title] = title
                 article[ArticleTable.content] = content
