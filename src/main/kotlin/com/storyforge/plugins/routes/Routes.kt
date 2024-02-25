@@ -252,7 +252,7 @@ fun Route.article(
             val userList = userDb.getAllUserList()
             if (userList?.isNotEmpty() == true) {
                 call.respond(userList)
-            }else{
+            } else {
                 call.respondText("No User Found....", status = HttpStatusCode.OK)
             }
 
@@ -262,6 +262,26 @@ fun Route.article(
                 status = HttpStatusCode.Unauthorized
             )
         }
+    }
+    get("v1/user/{id}") {
+        val id = call.parameters["id"]
+        try {
+            val userId = id?.toInt()?.let {
+                userDb.getUserById(it)
+            } ?: return@get call.respondText(
+                text = "No User Found Regarding This Id",
+                status = HttpStatusCode.Unauthorized
+            )
+            userId.let {
+                call.respond(it)
+            }
+        } catch (e: Throwable) {
+            call.respondText(
+                text = "Error While Fetching User ${e.message}",
+                status = HttpStatusCode.Unauthorized
+            )
+        }
+
     }
 
 }
