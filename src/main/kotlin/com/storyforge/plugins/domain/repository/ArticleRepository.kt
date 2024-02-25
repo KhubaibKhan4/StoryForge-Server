@@ -81,7 +81,7 @@ class ArticleRepository : ArticleDao {
 
     private fun rowToResult(row: ResultRow): Article? {
         if (row == null) {
-            null
+           return null
         }
         return Article(
             id = row[ArticleTable.id],
