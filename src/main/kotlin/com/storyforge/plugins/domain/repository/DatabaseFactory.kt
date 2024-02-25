@@ -1,6 +1,7 @@
 package com.storyforge.plugins.domain.repository
 
 import com.storyforge.plugins.data.local.ArticleTable
+import com.storyforge.plugins.data.local.UserTable
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.Dispatchers
@@ -15,6 +16,7 @@ object DatabaseFactory {
         Database.connect(hikari())
         transaction {
             SchemaUtils.create(ArticleTable)
+            SchemaUtils.create(UserTable)
         }
     }
 
@@ -30,7 +32,7 @@ object DatabaseFactory {
     }
 
     suspend fun <T> dbQuery(block: () -> T): T =
-        withContext(Dispatchers.IO){
+        withContext(Dispatchers.IO) {
             transaction {
                 block()
             }
