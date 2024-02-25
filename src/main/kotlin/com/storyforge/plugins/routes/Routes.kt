@@ -283,5 +283,33 @@ fun Route.article(
         }
 
     }
+    delete("v1/user/{id}") {
+        val id = call.parameters["id"]
+        try {
+            val userId = id?.toInt()?.let {
+                userDb.deleteUserById(it)
+            } ?: return@delete call.respondText(
+                text = "Error Regarding Fetching User"
+            )
+
+            if (userId == 1) {
+                call.respondText(
+                    text = "User Deleted SuccessFully..",
+                    status = HttpStatusCode.OK
+                )
+            } else {
+                call.respondText(
+                    text = "No User Found....",
+                    status = HttpStatusCode.BadRequest
+                )
+            }
+
+        } catch (e: Throwable) {
+            call.respondText(
+                text = "Error While Deleting User ${e.message}",
+                status = HttpStatusCode.Unauthorized
+            )
+        }
+    }
 
 }
